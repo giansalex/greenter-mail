@@ -5,6 +5,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d974f208ef9a4b19af96abc6af6aeec1)](https://www.codacy.com/app/giansalex/greenter-mail?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=giansalex/greenter-mail&amp;utm_campaign=Badge_Grade)     
 
 Notificación vía correo electrónico a contribuyentes receptores de comprobantes electrónicos.
+> Aún en fase de desarrollo.
 
 # Install
 ```bash
