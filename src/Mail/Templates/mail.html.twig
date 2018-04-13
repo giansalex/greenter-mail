@@ -1,0 +1,70 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tbody>
+		<tr>
+			<td colspan="2" style="padding:5px;background-color:#DF471C;">
+				<img src="#" style="height:60px;float:left;">
+				<div style="padding:10px;font-size:35px;color:#ffffff;float:left;">Nombre Empresa SAC</div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" style="padding:25px 10px 20px;font-size:17px;">
+				Hola <span style="color:#DF471C;font-weight: bold;">{{ cliente }}</span>,<br>Te acabamos de emitir una <span style="color:#DF471C;font-weight: bold;">{{ tipo_documento }}</span> a trav&eacute;s de nuestro sistema.
+			</td>
+		</tr>
+		<tr>
+			<td style="padding:5px 10px;font-size:17px;font-weight:bold;width:200px;">
+				Numero de Factura:
+			</td>
+			<td style="padding:5px 10px;font-size:17px;color:#DF471C;font-weight:bold;">
+				{{ numero }}
+			</td>
+		</tr>
+		<tr>
+			<td style="padding:5px 10px;font-size:17px;font-weight:bold;">
+				Fecha de Emisi&oacute;n:
+			</td>
+			<td style="padding:5px 10px;font-size:17px;color:#DF471C;font-weight:bold;">
+				{{ emision }}
+			</td>
+		</tr>
+		{% if es_gratuito == false %}
+		<tr>
+			<td style="padding:5px 10px;font-size:17px;font-weight:bold;">
+				Fecha de Vencimiento:
+			</td>
+			<td style="padding:5px 10px;font-size:17px;color:#DF471C;font-weight:bold;">
+				{{ vencimiento }}
+			</td>
+		</tr>
+		{% endif %}
+		<tr>
+			<td style="padding:5px 10px;font-size:17px;font-weight:bold;">
+				Monto Total:
+			</td>
+			<td style="padding:5px 10px;font-size:17px;color:#DF471C;font-weight:bold;">
+				{{ moneda }} {{ monto }}
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" style="padding:20px 10px;font-size:16px;">
+				Puede ver su factura electr&oacute;nica descargando el archivo adjunto o haciendo click en el enlace.<br>
+				<a style="color:#DF471C;text-decoration:none;font-weight:bold;" href="#" target="_blank">url</a>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" style="padding:15px 10px;font-size:16px;">
+				Atentamente,<br/><br/><strong>Nombre Empresa SAC</strong>
+				<hr>
+				<p style="font-size:14px;">Cualquier consulta por favor comunicarse con nuestra Central Telef&oacute;nica: <strong>000-0000</strong>, Horario de atenci&oacute;n: <strong>Lunes a Viernes de 9:00am a 1:00pm y de 2:00pm a 6:00pm, S&aacute;bados de 9:00am a 1:00pm</strong></p>
+				<hr>
+				<p style="font-size:14px;font-weight:bold;">Este es un sistema autom&aacute;tico de aviso, por favor no responda este correo.</p>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" style="padding:10px;font-weight:normal;font-size:13px;text-align:justify;">
+				<hr>
+				El correo presente y su(s) documento(s) adjunto(s) contiene informaci&oacute;n confidencial, y est&aacute; destinado exclusivamente al uso de la persona o entidad a la que va dirigida. Si usted no es el destinatario se&ntilde;alado, no puede difundir, distribuir o copiar este correo. Por favor notifique inmediatamente al emisor si usted ha recibido este correo electr&oacute;nico por error, y elimine el correo de su sistema. Si usted no es el destinatario, se le notifica que revelar, copiar, distribuir o tomar cualquier acci&oacute;n basada en el contenido de esta informaci&oacute;n est&aacute; estrictamente prohibida.
+			</td>
+		</tr>
+	</tbody>
+</table>
