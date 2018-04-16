@@ -29,26 +29,7 @@ class MailNotificator implements NotificatorInterface {
      * @return mixed
      */
     public function notify(Notification $notification, $options = []){
-        
-        $data = [
-            'cliente' => 'CLIENTE SA',
-            'tipo_documento' => "Factura Electrónica",
-            'numero' => 'F001-1',
-            'emision' => '2018-04-13',
-            'vencimiento' => '2018-04-13',
-            'moneda' => 'SOLES',
-            'monto' => '100.00',
-            'tipo' => '01',
-            'uuid' => '',
-            'es_gratuito' => false
-        ];
-
-        $this->mailServer->setBody($this->getTemplate($data));
-        $this->mailServer->send();
+        return $this->mailServer->send($notification, $options);
     }
 
-    private function getTemplate($data){
-        $twig = new \Twig_Environment(new \Twig_Loader_Filesystem(__DIR__ . '/Templates'));
-        return $twig->render('mail.html.twig', $data);
-    }
 }

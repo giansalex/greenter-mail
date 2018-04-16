@@ -11,15 +11,28 @@ namespace Tests\Greenter\Mail;
 use Greenter\Mail\MailNotificator;
 use Greenter\Notify\Notification;
 
+use Greenter\Data\StoreTrait;
+
+use Greenter\See;
+use Greenter\Ws\Services\SunatEndpoints;
+use Greenter\Validator\XmlErrorCodeProvider;
+
+/*use Greenter\Model\Sale\Document;
+use Greenter\Model\Sale\Invoice;
+use Greenter\Model\Sale\SaleDetail;
+use Greenter\Model\Sale\Legend;*/
+
 use Greenter\Mail\MailServer;
 use Greenter\Mail\MailEmail;
 use Greenter\Mail\Config\ConfigGmail;
 
 class MailNotificatorTest extends \PHPUnit_Framework_TestCase{
 
+    use StoreTrait;
+
     public function testNotification(){
 
-    	$options = [
+    	$config = [
     		'SMTPDebug' => 2,
     		'isSMTP' => true,
     		'Host' => 'smtp.gmail.com',
@@ -30,18 +43,35 @@ class MailNotificatorTest extends \PHPUnit_Framework_TestCase{
     		'Port' => 587
     	];
 
-    	$mailServer = new MailServer($options, MailServer::DEBUG);
-        $mailServer->setSender(new MailEmail('correo', 'CORREO PRUEBA'));
-        $mailServer->setSubject('Documento electrónico emitido por Nombre Empresa SAC');
-        $mailServer->setReceipt(new MailEmail('Appee1975@dayrep.com', 'CORREO PRUEBA')); //fakemailgenerator.com
+        /*$see = new See();
+        $see->setService(SunatEndpoints::FE_BETA);
+        $see->setCodeProvider(new XmlErrorCodeProvider());
+        $see->setCertificate(file_get_contents(__DIR__ . '/../../resources/cert.pem'));
+        $see->setCredentials('20000000001MODDATOS', 'moddatos');
+        $see->setCachePath(__DIR__ . '/../cache');
+        $res = $see->send($invoice);*/
 
-        $mail = new MailNotificator($mailServer);
+    	$mailServer = new MailServer($config, MailServer::DEBUG);
+        $mailServer->setSender(new MailEmail('correo', 'CORREO PRUEBA 1'));
+        $mailServer->setReceipt(new MailEmail('Appee1975@dayrep.com', 'CORREO PRUEBA 2')); //fakemailgenerator.com
 
-        $mail->notify(new Notification());
+        $notification = new Notification();
+        $notification->setDocument($this->getInvoice());
+        $notification->setFiles([]);
 
-        $this->assertTrue(true);
+        $logo = file_get_contents(__DIR__.'/../../resources/logo.png');
+        $options = [
+            'system' => [
+                'logo' => $logo
+            ],
+            'user' => [
+                'url_consulta' => 'http://',
+                'telefono' => '000-0000',
+                'horario_atencion' => 'Lunes a Viernes de 9:00am a 1:00pm y de 2:00pm a 6:00pm, S&aacute;bados de 9:00am a 1:00pm'
+            ]
+        ];
+        $mailNotificator = new MailNotificator($mailServer);
+        $response = $mailNotificator->notify($notification, $options);
+        print_r($response);
     }
 }
-
-/*$test = new MailNotificatorTest();
-$test->testNotification();*/

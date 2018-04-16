@@ -2,16 +2,22 @@
 
 namespace Greenter\Mail;
 
+use Greenter\Notify\Notification;
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 use Greenter\Mail\MailSender;
 
+use Greenter\Report\HtmlReport;
+use Greenter\Model\DocumentInterface;
+
 class MailServer {
 
 	const DEBUG = true;
+	const SUBJECT = 'Documento electrónico emitido por {}';
 
-	private $mail;
+	protected $mail;
 
     public function __construct($options = [], $debug = true) {
     	$this->mail = new PHPMailer($debug);
@@ -56,20 +62,22 @@ class MailServer {
     	$this->mail->setFrom($sender->getEmail(), $sender->getName());
     }
 
-    public function setSubject($subject){
-    	$this->mail->Subject = $subject;
-    }
-
     public function setReceipt(MailEmail $receipt){
     	$this->mail->addAddress($receipt->getEmail(), $receipt->getName());
     }
 
-    public function setBody($data){
-    	$this->mail->Body = $data;
-    }
+    /*public function setAttachment($file){
+    	$this->mail->addAttachment('/tmp/file.pdf', 'file.pdf');
+    }*/
 
-    public function send(){
+    public function send(Notification $notification, $options = []){
     	$response = array('success' => true, 'error' => false, 'message' => '');
+
+    	$document = $notification->getDocument();
+    	$content = $this->getTemplate($document, $options);
+    	$this->mail->Body = $content;
+    	$this->mail->Subject = str_replace('{}', $document->getCompany()->getRazonSocial(), MailServer::SUBJECT);
+
     	try {
     		$this->mail->send();
     		$response['message'] = 'Correo enviado';
@@ -79,5 +87,14 @@ class MailServer {
 		}
 
 		return $response;
+    }
+
+    private function getTemplate(DocumentInterface $document, $options = []){
+        $html = new HtmlReport(__DIR__ . '/Templates', [
+            //'cache' => __DIR__ . '/../cache',
+            'strict_variables' => true
+        ]);
+        $html->setTemplate('mail.html.twig');
+        return $html->render($document, $options);
     }
 }
