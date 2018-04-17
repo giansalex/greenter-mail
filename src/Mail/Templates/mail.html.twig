@@ -45,7 +45,7 @@
 				Monto Total:
 			</td>
 			<td style="padding:5px 10px;font-size:17px;color:#DF471C;font-weight:bold;">
-				{{ doc.mtoImpVenta|number_format(2, '.', ',') }} {{ doc.tipoMoneda|catalog('021') }}
+				{{ doc.mtoImpVenta|n_format }} {{ doc.tipoMoneda|catalog('021') }}
 			</td>
 		</tr>
 		<tr>

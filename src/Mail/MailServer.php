@@ -22,6 +22,7 @@ class MailServer {
     public function __construct($options = [], $debug = true) {
     	$this->mail = new PHPMailer($debug);
     	$this->mail->isHTML(true);
+        $this->mail->CharSet = 'UTF-8';
 
     	if(isset($options['SMTPDebug'])){
 	    	$this->mail->SMTPDebug = $options['SMTPDebug'];
@@ -66,25 +67,30 @@ class MailServer {
     	$this->mail->addAddress($receipt->getEmail(), $receipt->getName());
     }
 
-    /*public function setAttachment($file){
-    	$this->mail->addAttachment('/tmp/file.pdf', 'file.pdf');
-    }*/
+    private function setBody(DocumentInterface $document, $options = []){
+        $content = $this->getTemplate($document, $options);
+        $this->mail->Body = $content;
+        $this->mail->Subject = str_replace('{}', $document->getCompany()->getRazonSocial(), MailServer::SUBJECT);
+    }
+
+    private function setAttachment($files){
+        foreach ($files as $file) {
+    	   $this->mail->AddStringAttachment($file->getContent(), $file->getName(), 'base64', $file->getType());
+        }
+    }
 
     public function send(Notification $notification, $options = []){
-    	$response = array('success' => true, 'error' => false, 'message' => '');
+    	$response = array('success' => true, 'error' => false, 'code' => 0, 'message' => '');
+    	
+        $this->setBody($notification->getDocument(), $options);
+        $this->setAttachment($notification->getFiles());
 
-    	$document = $notification->getDocument();
-    	$content = $this->getTemplate($document, $options);
-    	$this->mail->Body = $content;
-    	$this->mail->Subject = str_replace('{}', $document->getCompany()->getRazonSocial(), MailServer::SUBJECT);
-
-    	try {
-    		$this->mail->send();
-    		$response['message'] = 'Correo enviado';
-    	} catch (Exception $e) {
-		    $response['error'] = true;
-		    $response['message'] = $this->mail->ErrorInfo;
-		}
+		if (!$this->mail->send()) {
+            $response['message'] = 'Correo enviado';
+        } else {
+            $response['error'] = true;
+            $response['message'] = $this->mail->ErrorInfo;
+        }
 
 		return $response;
     }
