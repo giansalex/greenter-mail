@@ -37,8 +37,8 @@ class MailNotificatorTest extends \PHPUnit_Framework_TestCase{
     		'isSMTP' => true,
     		'Host' => 'smtp.gmail.com',
     		'SMTPAuth' => true,
-    		'Username' => 'correo',
-    		'Password' => 'clave',
+    		'Username' => 'fake@gmail.com',
+    		'Password' => 'pass',
     		'SMTPSecure' => 'tls',
     		'Port' => 587
     	];
@@ -52,7 +52,7 @@ class MailNotificatorTest extends \PHPUnit_Framework_TestCase{
         $res = $see->send($invoice);*/
 
     	$mailServer = new MailServer($config, MailServer::DEBUG);
-        $mailServer->setSender(new MailEmail('correo', 'CORREO PRUEBA 1'));
+        $mailServer->setSender(new MailEmail('fake@gmail.com', 'CORREO PRUEBA 1'));
         $mailServer->setReceipt(new MailEmail('Appee1975@dayrep.com', 'CORREO PRUEBA 2')); //fakemailgenerator.com
 
         $notification = new Notification();
