@@ -8,7 +8,6 @@
 
 namespace Tests\Greenter\Mail;
 
-//require __DIR__ . '/Util.php';
 use Tests\Greenter\Mail\Util;
 
 use Greenter\Ws\Services\SunatEndpoints;
@@ -18,15 +17,11 @@ use Greenter\Model\Sale\Invoice;
 use Greenter\Model\Sale\SaleDetail;
 use Greenter\Model\Sale\Legend;
 
-use Greenter\Report\HtmlReport;
-use Greenter\Report\PdfReport;
-use Greenter\Model\DocumentInterface;
 use Greenter\Notify\Notification;
 use Greenter\Notify\Attachment;
 use Greenter\Mail\MailNotificator;
 use Greenter\Mail\MailServer;
 use Greenter\Mail\MailEmail;
-use Greenter\Mail\Config\ConfigGmail;
 
 class MailNotificatorTest extends \PHPUnit_Framework_TestCase{
 
@@ -47,7 +42,8 @@ class MailNotificatorTest extends \PHPUnit_Framework_TestCase{
         
         $util = Util::getInstance();
         $see = $util->getSee(SunatEndpoints::FE_BETA);
-        $result = $see->send($this->getInvoice($util));
+        $invoice = $this->getInvoice($util);
+        $result = $see->send($invoice);
 
         if ($result->isSuccess()){
         	$mailServer = new MailServer($config, MailServer::DEBUG);
@@ -56,15 +52,18 @@ class MailNotificatorTest extends \PHPUnit_Framework_TestCase{
 
             $notification = new Notification();
             $notification->setDocument($invoice);
+
             $xml = new Attachment();
             $xml->setName($invoice->getName() . '.xml');
             $xml->setContent($see->getFactory()->getLastXml());
             $xml->setType('application/xml');
+
             $pdf = new Attachment();
             $pdf->setName($invoice->getName() . '.pdf');
             $contentPdf = $util->getPdf($invoice);
             $pdf->setContent($contentPdf);
             $pdf->setType('application/pdf');
+
             $notification->setFiles([$xml, $pdf]);
 
             $logo = file_get_contents(__DIR__ . '/../resources/logo.png');
@@ -85,7 +84,6 @@ class MailNotificatorTest extends \PHPUnit_Framework_TestCase{
             $response['message'] = $result->getError();
         }
         var_dump($response);
-
     }
 
     private function getinvoice($util){

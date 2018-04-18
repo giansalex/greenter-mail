@@ -86,10 +86,10 @@ class MailServer {
         $this->setAttachment($notification->getFiles());
 
 		if (!$this->mail->send()) {
-            $response['message'] = 'Correo enviado';
-        } else {
             $response['error'] = true;
             $response['message'] = $this->mail->ErrorInfo;
+        } else {
+            $response['message'] = 'Correo enviado';
         }
 
 		return $response;
