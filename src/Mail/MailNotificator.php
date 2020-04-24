@@ -11,16 +11,25 @@ namespace Greenter\Mail;
 use Greenter\Notify\Notification;
 use Greenter\Notify\NotificatorInterface;
 
-class MailNotificator implements NotificatorInterface
-{
+use Greenter\Mail\MailServer;
+use Greenter\Mail\MailSender;
+
+class MailNotificator implements NotificatorInterface {
+
+    private $mailServer;
+
+    public function __construct(MailServer $mailServer){
+        $this->mailServer = $mailServer;
+    }
+
     /**
      * @param Notification $notification
      * @param array $options
      *
      * @return mixed
      */
-    public function notify(Notification $notification, $options = [])
-    {
-        // TODO: Implement notify() method.
+    public function notify(Notification $notification, $options = []){
+        return $this->mailServer->send($notification, $options);
     }
+
 }
